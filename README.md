@@ -39,7 +39,22 @@ Example <b>$ ls</b> means enter ls into terminal
 </div>
 <h2>User Guide</h2>
 <div>
-<h3></h3>
+Note: Bolded Lines with >>> mean execute this command in python
+<h3>Adding Users</h3>
+<ul>
+import the ApiInterface object<br>
+<b>>>> from ebapi.api_interface import ApiInterface</b><br>
+</ul>
+<ul>
+create an ApiInterface
+<b>>>> interface = ApiInterface()</b>
+</ul>
+<ul>
+  Add a user <br>
+  <b>>>> interface.add_user()</b>
+  This will display a ecobee pin and pause execution
+ 
+</ul>
 </div>
 </body>
 </html>
