@@ -24,36 +24,41 @@ If you do not need to have multiple processes the Local Manager is recommended s
 </div>
 <h2>Install Guide</h2>
 <div>
-Note: bolded lines with $ mean execute this command in bash<br>
-Example <b>$ ls</b> means enter ls into terminal
+Note: lines with $ mean execute this command in bash<br>
+Example <code>$ ls</code> means enter ls into terminal
 <ol>
 <li>Clone the Repository<br>
-<b>$ git clone https://github.com/ecobee/python_api_sdk.git</b></li>
+<code>$ git clone https://github.com/ecobee/python_api_sdk.git</code></li>
 <li>Navigate inside the root directory<br>
-<b>$ cd python_api_sdk</b></li>
+<code>$ cd python_api_sdk</code></li>
 <li>Install the Repository<br>
-<b>$ pip install .</b></li>
+<code>$ pip install .</code></li>
 <li>Run the interactive enviornment setup<br>
-<b>$ python setup_scripts/env_setup.py</b></li>
+<code>$ python setup_scripts/env_setup.py</code></li>
 </ol>
 </div>
 <h2>User Guide</h2>
 <div>
-Note: Bolded Lines with >>> mean execute this command in python
+Note: Lines with >>> mean execute this command in python
 <h3>Adding Users</h3>
 <ul>
 import the ApiInterface object<br>
-<b>>>> from ebapi.api_interface import ApiInterface</b><br>
+<code>>>> from ebapi.api_interface import ApiInterface</code><br>
 </ul>
 <ul>
-create an ApiInterface
-<b>>>> interface = ApiInterface()</b>
+   create an ApiInterface<br>
+<code>>>> interface = ApiInterface()</code>
 </ul>
 <ul>
-  Add a user <br>
-  <b>>>> interface.add_user()</b>
-  This will display a ecobee pin and pause execution
- 
+Add a user<br>
+<code>>>> interface.add_user()</code><br>
+This will display a ecobee pin and pause execution<br> 
+Navigate to www.ecobee.com and login with you username and password<br> 
+Home (Top right) --> My Apps (Bottom Left) --> Add application (Enter into Text Field)<br>
+Hit enter into you python session<br>
+
+This will generate access and refresh tokens
+
 </ul>
 </div>
 </body>
