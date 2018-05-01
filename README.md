@@ -28,7 +28,7 @@ $ cd python_api_sdk
 Install the Repository
 $ pip install .
 
-#Run the interactive enviornment setup
+#Run the interactive enviornment setup note this only works for mac / linux
 $ python setup_scripts/env_setup.py
 ```
 </div>
