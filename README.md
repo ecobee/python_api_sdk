@@ -12,10 +12,11 @@
       </ul>
     </div>
       
-<h2>Install Guide</h2>
+
 <div>
-  
-<b>Note: lines with $ mean execute this command in bash</b><br>
+  <h2>Install Guide</h2>
+  <b>Before you begin Register as an ecobee Developer Here https://www.ecobee.com/developers/</b><br>
+  <b>Note: lines with $ mean execute this command in bash</b><br>
   
 ``` bash
 Clone the Repository
@@ -79,10 +80,13 @@ Object Defitions: https://www.ecobee.com/home/developer/api/documentation/v1/aut
 
 
 ``` python
->>> thermostat_identifier.show_users() # will dispay the Thermostat ID that are stored
+>>> # will dispay the Thermostat ID that are stored
+>>> thermostat_identifier.show_users()
+>>>
+>>> #12 digit thermostat ID
+>>> thermostat_identifier = "123456789012" 
 >>> 
->>> thermostat_identifier = "123456789012" #12 digit thermostat ID
-
+>>> # Return a Dictionary of the thermostats settings
 >>> interface.get_settings(thermostat_identifier)
 >>> 
 ```
