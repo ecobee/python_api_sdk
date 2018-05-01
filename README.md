@@ -44,10 +44,10 @@ $ python setup_scripts/env_setup.py
 
 <h2>User Guide</h2>
 <div>
-Note: Bolded Lines with >>> mean execute this command in python
-<h3>Adding Users</h3>
+  <b>Note: Bolded Lines with >>> mean execute this command in python</b>
 
-
+  <h3>Adding Users</h3>
+  
 ``` python
 >>> # Create an ApiInterface object
 >>> from ebapi.api_interface import ApiInterface
@@ -55,18 +55,23 @@ Note: Bolded Lines with >>> mean execute this command in python
 >>> 
 >>> #Add a user
 >>> interface.add_user()
-```
-This will dispaly the following test:
-
-Enter the PIN '<some 4 digit pin>' into the Add Application window and click Add Application
+Enter the PIN '<4-digit-pin>' into the Add Application window and click Add Application<br>
 waiting press enter to continue...
+>>> 
+```
 
-Navigate to www.ecobee.com and login with you username and password<br>
-Home (Top right) --> My Apps (Bottom Left) --> Add application (Enter into Text Field)<br>
-Hit enter into you python session<br>
 
-This will generate access and refresh tokens
-Press Enter To resume execution once 
+<h3>Adding an 3rd Party Application</h3>
+<ol>
+  <li>Navigate to www.ecobee.com and login with you username and password</li>
+  <li>My Account (Top right)</li>
+  <li>My Apps (Bottom Left)</li>
+  <li>Add application (Bottom Left)</li>
+  <li>Enter the <4-digit-pin> into the text box</li>
+  <li>Click Validate (Bottom Right)</li>
+  <li>Click Add Application</li>
+<ol>
+  <b>Return to you python session</b>
 </div>
 </body>
 </html>
