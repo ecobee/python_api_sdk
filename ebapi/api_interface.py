@@ -8,25 +8,29 @@ from .vacation import from_json
 
 
 class ApiInterface:
-    """This class abstracts what we can ask the api and get from the api."""
+    """This class abstracts formatting specific requests to the Ecobee API."""
 
     def __init__(self, verbose=False):
         self.conn = ApiConnection(verbose)
 
     def delete_vacations(self, names, identifier):
+        """Delete vacations for thermostat identifer with name in names"""
         funcs = [wrap_delete_vacation(n) for n in names]
         self.conn.send_functions(funcs, identifier)
 
     def send_vacations(self, vacations, identifier):
+        """Send the vacation events in vacations to thermostat identifier"""
         funcs = [wrap_create_vacation(v.to_json()) for v in vacations]
         return self.conn.send_functions(funcs, identifier)
 
     def get_precool_settings(self, identifier):
+        """Return the 'disablePreCooling setting AKA. Smart Recovery"""
         settings = self.get_settings(identifier)
         resp = {"disablePreCooling": settings["disablePreCooling"]}
         return resp
 
     def update_disable_precool_setting(self, identifier, cool_flag):
+        """Set the disablePreCooling setting to cool_flag."""
         body = {"disablePreCooling": cool_flag}
         return self.update_settings(body, identifier)
 
