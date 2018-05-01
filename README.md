@@ -24,37 +24,49 @@ If you do not need to have multiple processes the Local Manager is recommended s
 </div>
 <h2>Install Guide</h2>
 <div>
-Note: bolded lines with $ mean execute this command in bash<br>
-Example <b>$ ls</b> means enter ls into terminal
-<ol>
-<li>Clone the Repository<br>
-<b>$ git clone https://github.com/ecobee/python_api_sdk.git</b></li>
-<li>Navigate inside the root directory<br>
-<b>$ cd python_api_sdk</b></li>
-<li>Install the Repository<br>
-<b>$ pip install .</b></li>
-<li>Run the interactive enviornment setup<br>
-<b>$ python setup_scripts/env_setup.py</b></li>
-</ol>
+  
+<b>Note: lines with $ mean execute this command in bash</b><br>
+  
+``` bash
+Clone the Repository
+$ git clone https://github.com/ecobee/python_api_sdk.git
+
+Navigate inside the root directory
+$ cd python_api_sdk
+
+Install the Repository
+$ pip install .
+
+#Run the interactive enviornment setup
+$ python setup_scripts/env_setup.py
+```
 </div>
+
 <h2>User Guide</h2>
 <div>
 Note: Bolded Lines with >>> mean execute this command in python
 <h3>Adding Users</h3>
-<ul>
-import the ApiInterface object<br>
-<b>>>> from ebapi.api_interface import ApiInterface</b><br>
-</ul>
-<ul>
-create an ApiInterface
-<b>>>> interface = ApiInterface()</b>
-</ul>
-<ul>
-  Add a user <br>
-  <b>>>> interface.add_user()</b>
-  This will display a ecobee pin and pause execution
- 
-</ul>
+
+
+``` python
+>>> # Create an ApiInterface object
+>>> from ebapi.api_interface import ApiInterface
+>>> interface = ApiInterface()
+>>> 
+>>> #Add a user
+>>> interface.add_user()
+```
+This will dispaly the following test:
+
+Enter the PIN '<some 4 digit pin>' into the Add Application window and click Add Application
+waiting press enter to continue...
+
+Navigate to www.ecobee.com and login with you username and password<br>
+Home (Top right) --> My Apps (Bottom Left) --> Add application (Enter into Text Field)<br>
+Hit enter into you python session<br>
+
+This will generate access and refresh tokens
+Press Enter To resume execution once 
 </div>
 </body>
 </html>
