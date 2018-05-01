@@ -69,7 +69,8 @@ It will also store a all the thermostats that the user has<br>
 <div>
   <h2>Making Requests</h2>
   Requests are made by sepecifying a method of the ApiInterface Object<br>
-  And a 12 digit Thermostat Identifier can be found on the About My Thermostat (Bottom Right of a Thermostat Page)<br>
+  and a 12 digit Thermostat Identifier.<br>
+  These can be found on the About My Thermostat (Bottom Right of a Thermostat Page)<br>
   
 All Requests Reutrn Dictionaries from the Ecobee API's JSON format.
 
@@ -78,7 +79,7 @@ Object Defitions: https://www.ecobee.com/home/developer/api/documentation/v1/aut
 
 
 ``` python
->>> thermostat_identifier.show_users()
+>>> thermostat_identifier.show_users() # will dispay the Thermostat ID that are stored
 >>> 
 >>> thermostat_identifier = "123456789012" #12 digit thermostat ID
 
