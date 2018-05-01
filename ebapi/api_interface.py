@@ -111,6 +111,11 @@ class ApiInterface:
                                 "temp": cape["value"]}
         raise ApiError("No thermostat temperature found")
 
+    def add_user(self):
+        self.conn.add_user()
+    
+    def rm_user(self, tstat_id):
+        self.conn.tokens.delete(tstat_id)
 
 def wrap_create_vacation(vacation):
     create_function = {"type": "createVacation",
