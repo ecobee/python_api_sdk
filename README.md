@@ -1,27 +1,17 @@
 <html>
-<body>
-<h1>Ecobee API Python SDK</h1>
-<div>
-This project provides a simple python interface to interact with the ecobee Web REST API.
-</div>
-<div>
-<h2>Overview</h2>
-<ul>
-<li>Manage Tokens Operations like regestering and refreshing</li>
-<li>Format boilerplate api requests.</li>
-<li>Provide simple functions to perform common api operations</li>
-</ul>
-<div>
-There are two ways to manage your tokens.
-<ol>
-<li><b>Local File: </b>Read and Write to files on your computer. (refreshes tokens as needed)</li>
-<li><b>Database: </b>Read from a database. (refresheds all tokens on a schedule)</li>
-</ol>
-The main difference between the two token managers is that the Database system supports multiple processes (or machines)<br>
-where as the Local File system does not.<br>
-If you do not need to have multiple processes the Local Manager is recommended since it is simpler to setup
-</div>
-</div>
+  <body>
+    <h1>Ecobee API Python SDK</h1>
+    <b>This project provides a simple python interface to interact with the ecobee Web REST API.</b>
+    <div>
+      <h2>Overview</h2>
+      <b>It provides the following functionality</b>
+      <ul>
+        <li>Manage Tokens Operations like regestering and refreshing</li>
+        <li>Format boilerplate api requests.</li>
+        <li>Provide simple functions to perform common api operations</li>
+      </ul>
+    </div>
+      
 <h2>Install Guide</h2>
 <div>
   
@@ -70,8 +60,31 @@ waiting press enter to continue...
   <li>Enter the <4-digit-pin> into the text box</li>
   <li>Click Validate (Bottom Right)</li>
   <li>Click Add Application</li>
-<ol>
-  <b>Return to you python session</b>
+</ol>
+
+<b>Return to you python session and press Enter</b><br>
+The SDK will have stored access and refresh tokens for the user accout<br>
+It will also store a all the thermostats that the user has<br>
+</div>
+<div>
+  <h2>Making Requests</h2>
+  Requests are made by sepecifying a method of the ApiInterface Object<br>
+  And a 12 digit Thermostat Identifier can be found on the About My Thermostat (Bottom Right of a Thermostat Page)<br>
+  
+All Requests Reutrn Dictionaries from the Ecobee API's JSON format.
+
+Reference Documentation: https://www.ecobee.com/home/developer/api/introduction/index.shtml<br>
+Object Defitions: https://www.ecobee.com/home/developer/api/documentation/v1/auth/auth-intro.shtml<br>
+
+
+``` python
+>>> thermostat_identifier.show_users()
+>>> 
+>>> thermostat_identifier = "123456789012" #12 digit thermostat ID
+
+>>> interface.get_settings(thermostat_identifier)
+>>> 
+```
 </div>
 </body>
 </html>
