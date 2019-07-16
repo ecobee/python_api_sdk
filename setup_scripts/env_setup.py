@@ -29,7 +29,7 @@ def setup():
         print_or_record(prefrences_file, line, print_mode)
 
     lines = [
-        "#Added by the EBAPI setup script\n",
+        "\n# Added by the EBAPI setup script\n",
         "source {}\n".format(prefrences_file)
     ]
 

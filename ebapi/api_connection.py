@@ -5,7 +5,6 @@ import requests
 import json
 import copy
 from .tokens import FileTokens as Tokens
-import sys
 import logging
 
 url_base = 'https://api.ecobee.com/'
@@ -15,7 +14,9 @@ app_key = os.environ["ECOBEE_APPLICATION_KEY"]
 logger = logging.getLogger(__name__)
 
 if app_key == "":
-    raise ValueError("Appliection KEY has not been initilized. Please set a ECOBEE_APPLICATION_KEY enviornment variable")
+    raise ValueError("Appliection KEY has not been initilized."
+                     "Please set a ECOBEE_APPLICATION_KEY enviornment variable")
+
 
 class ApiConnection:
     """A connection to send requests to the Ecobee API.
@@ -88,7 +89,7 @@ class ApiConnection:
         log += "Args:\n"
         log += format_dict(kwargs)
         logger.debug(log)
-    
+
     def send_request(self, func, **kwargs):
         # API response codes
         EXPIRED_TOKEN = 14
@@ -120,7 +121,7 @@ class ApiConnection:
         refresh_token into the RDS ecobee.IRS_API_KEYS Table.
         """
 
-        pin, code = self.get_auth_pin()       
+        pin, code = self.get_auth_pin()
         print("Enter the PIN '{}' into the Add Application window and click Add Application".format(pin))
         input("waiting press enter to continue...")
 
@@ -132,12 +133,11 @@ class ApiConnection:
             logger.info("Adding Thermostat ID: {}".format(tstat_id))
             self.tokens.insert_tstat(user_id, tstat_id)
 
-
     def get_tstat_ids(self, acc):
         headers = {"Content-Type": "application/json;charset=UTF-8",
                    "Authorization": "Bearer " + acc}
         url = url_base + version + 'thermostat'
-        selection = {"selectionType": "registered", "selectionMatch": ""} 
+        selection = {"selectionType": "registered", "selectionMatch": ""}
         params = {'format': 'json',
                   'body': json.dumps({"selection": selection})}
         resp = requests.get(url, headers=headers, params=params).json()
@@ -153,7 +153,7 @@ class ApiConnection:
         resp = requests.get(url, params=params)
         try:
             resp_json = resp.json()
-        except:
+        except Exception:
             raise ValueError("Response Could not be translated to json {}".format(resp))
         return resp_json["ecobeePin"], resp_json["code"]
 
@@ -164,11 +164,11 @@ class ApiConnection:
         temp = requests.post(url, params=params).json()
         return (temp["access_token"], temp["refresh_token"])
 
+
 def get_chunks(vals, size):
     """Break vals in to batches of length size."""
     for i in range(0, len(vals), size):
         yield vals[i:i + size]
-
 
 
 def format_dict(dictionary, depth=0):
@@ -176,11 +176,11 @@ def format_dict(dictionary, depth=0):
     tab = " " * 4
     string = "{\n"
     for key, val in dictionary.items():
-        string += depth * tab 
+        string += depth * tab
         string += "{}: ".format(key)
         if type(val) is dict:
             string += format_dict(val, depth + 1)
-                
+
         else:
             if type(val) is str:
                 fmt = "'{}'\n"
@@ -189,6 +189,8 @@ def format_dict(dictionary, depth=0):
             string += fmt.format(val)
     string += (depth) * tab + '}\n'
     return string
+
+
 class ApiError(Exception):
 
     def __init__(self, *args, **kwargs):

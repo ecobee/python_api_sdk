@@ -117,7 +117,7 @@ class ApiInterface:
 
     def add_user(self):
         self.conn.add_user()
-    
+
     def rm_user(self, tstat_id):
         self.conn.tokens.delete(tstat_id)
 
@@ -125,7 +125,8 @@ class ApiInterface:
         print("Thermostat Identifier | User Identifier")
         for tstat_id, user_id in self.conn.tokens.tstat.itertuples():
             print("     {:s}     |     {:11}".format(tstat_id, user_id))
-            
+
+
 def wrap_create_vacation(vacation):
     create_function = {"type": "createVacation",
                        "params": vacation}
