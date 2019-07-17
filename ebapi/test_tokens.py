@@ -43,57 +43,57 @@ class TestFileTokens(unittest.TestCase):
 
     def test_no_files(self):
         load_evs()
-        ft = FileTokens()
-        self.dfs_empty(ft)
+        file_tokens = FileTokens()
+        self.dfs_empty(file_tokens)
         self.assertTrue(csvs_exist())
 
     def test_both_file(self):
-        ft = populated_setup()
+        file_tokens = populated_setup()
 
     def test_insert_tstat(self):
         load_evs()
-        ft = FileTokens()
-        ft.insert(stub_user_id, stub_id, stub_acc, stub_ref)
-        self.has_test_row(ft)
+        file_tokens = FileTokens()
+        file_tokens.insert(stub_user_id, stub_id, stub_acc, stub_ref)
+        self.has_test_row(file_tokens)
     
     
     def test_insert_saved(self):
         load_evs()
-        ft = FileTokens()
-        ft.insert(stub_user_id, stub_id, stub_acc, stub_ref)
-        del ft
-        ft_reopened = FileTokens()
-        self.has_test_row(ft_reopened)
+        file_tokens = FileTokens()
+        file_tokens.insert(stub_user_id, stub_id, stub_acc, stub_ref)
+        del file_tokens
+        file_tokens_reopened = FileTokens()
+        self.has_test_row(file_tokens_reopened)
 
     def test_insert_overrite_user(self):
-        ft = populated_setup()
+        file_tokens = populated_setup()
         with self.assertRaisesRegex(RuntimeError, "Attempt to overwrite user.*"):
-            ft.insert(stub_user_id, stub_id, stub_acc, stub_ref)
+            file_tokens.insert(stub_user_id, stub_id, stub_acc, stub_ref)
         
     def test_insert_tstat(self):
-        ft = populated_setup()
+        file_tokens = populated_setup()
         new_tstat = "100000000000"
-        ft.insert_tstat(stub_user_id, new_tstat)
-        self.assertEqual(ft.tstat.loc[new_tstat, "user_id"], stub_user_id)
+        file_tokens.insert_tstat(stub_user_id, new_tstat)
+        self.assertEqual(file_tokens.tstat.loc[new_tstat, "user_id"], stub_user_id)
 
     def test_delete_tstat(self):
-        ft = populated_setup()
-        ft.delete(stub_id)
-        self.dfs_empty(ft)
+        file_tokens = populated_setup()
+        file_tokens.delete(stub_id)
+        self.dfs_empty(file_tokens)
     
     def test_delete_tstat_saves(self):
-        ft = populated_setup()
-        ft.delete(stub_id)
-        del ft
-        ft = FileTokens()
-        self.dfs_empty(ft)
+        file_tokens = populated_setup()
+        file_tokens.delete(stub_id)
+        del file_tokens
+        file_tokens = FileTokens()
+        self.dfs_empty(file_tokens)
 
     def test_delete_tstat_dne(self):
         load_evs()
-        ft = FileTokens()
-        err_msg = ft.unknown_tstat.format(stub_id)
+        file_tokens = FileTokens()
+        err_msg = file_tokens.unknown_tstat.format(stub_id)
         with self.assertRaisesRegex(KeyError, err_msg):
-            ft.delete(stub_id)
+            file_tokens.delete(stub_id)
     
     @patch('.tokens.refresh_token')
     def mock_refresh_token(ref):
@@ -103,32 +103,32 @@ class TestFileTokens(unittest.TestCase):
         return acc, ref
                   
     def test_refresh(self):
-        ft = populated_setup()
-        ft.refresh()
+        file_tokens = populated_setup()
+        file_tokens.refresh()
 
-    def has_test_row(self, ft):
-        self.assertEqual(ft.user.loc[stub_user_id, "access_token"], stub_acc)
-        self.assertEqual(ft.user.loc[stub_user_id, "refresh_token"], stub_ref)
-        self.assertEqual(ft.tstat.loc[stub_id, "user_id"], stub_user_id)
+    def has_test_row(self, file_tokens):
+        self.assertEqual(file_tokens.user.loc[stub_user_id, "access_token"], stub_acc)
+        self.assertEqual(file_tokens.user.loc[stub_user_id, "refresh_token"], stub_ref)
+        self.assertEqual(file_tokens.tstat.loc[stub_id, "user_id"], stub_user_id)
 
 
     def test_get_access_token(self):
-        ft = populated_setup()
-        acc = ft.get_access_token(stub_id)
+        file_tokens = populated_setup()
+        acc = file_tokens.get_access_token(stub_id)
         self.assertEqual(acc, stub_acc)
 
     def test_get_access_token_dne(self):
         load_evs()
-        ft = FileTokens()
-        err_msg = ft.unknown_tstat.format(stub_id)
+        file_tokens = FileTokens()
+        err_msg = file_tokens.unknown_tstat.format(stub_id)
         with self.assertRaisesRegex(KeyError, err_msg):
-            ft.get_access_token(stub_id)
+            file_tokens.get_access_token(stub_id)
 
-    def dfs_empty(self, ft):
+    def dfs_empty(self, file_tokens):
         empty_user = gen_empty_user_df()
         empty_tstat = gen_empty_tstat_df()
-        self.assertTrue(ft.user.equals(empty_user))
-        self.assertTrue(ft.tstat.equals(empty_tstat))
+        self.assertTrue(file_tokens.user.equals(empty_user))
+        self.assertTrue(file_tokens.tstat.equals(empty_tstat))
     
         
 def delete_test_csvs():

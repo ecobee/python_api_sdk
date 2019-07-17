@@ -123,7 +123,7 @@ class ApiInterface:
 
     def show_users(self):
         print("Thermostat Identifier | User Identifier")
-        for tstat_id, user_id in self.conn.tokens.tstat.itertuples():
+        for tstat_id, user_id in self.conn.tokens.display_tokens():
             print("     {:s}     |     {:11}".format(tstat_id, user_id))
 
 

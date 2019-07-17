@@ -1,19 +1,21 @@
 """A connection to the ecobee API."""
 
 import os
-import requests
 import json
 import copy
-from .tokens import FileTokens as Tokens
 import logging
 
-url_base = 'https://api.ecobee.com/'
-version = '1/'
-app_key = os.environ["ECOBEE_APPLICATION_KEY"]
+import requests
+from .tokens import FileTokens as Tokens
+
+
+URL_BASE = 'https://api.ecobee.com/'
+VERSION = '1/'
+APP_KEY = os.environ["ECOBEE_APPLICATION_KEY"]
 
 logger = logging.getLogger(__name__)
 
-if app_key == "":
+if APP_KEY == "":
     raise ValueError("Appliection KEY has not been initilized."
                      "Please set a ECOBEE_APPLICATION_KEY enviornment variable")
 
@@ -24,7 +26,7 @@ class ApiConnection:
     This module presumes that you are only ever
     sending and reciving from one thermostat"""
 
-    url = url_base + version + 'thermostat'
+    url = URL_BASE + VERSION + 'thermostat'
     basic_selection = {"selectionType": "thermostats"}
 
     def __init__(self, verbose=False):
@@ -71,9 +73,9 @@ class ApiConnection:
         kwargs = {"headers": headers,
                   "params": params,
                   "data": json.dumps(body)}
-        return self.attempt(requests.post, identifier,  **kwargs)
+        return self.attempt(requests.post, identifier, **kwargs)
 
-    def attempt(self, func, identifier,  **kwargs):
+    def attempt(self, func, identifier, **kwargs):
         self.log_attempt(func, identifier, **kwargs)
         try:
             resp = self.send_request(func, **kwargs)
@@ -96,13 +98,15 @@ class ApiConnection:
         SUCCESS = 0
         resp = func(self.url, **kwargs).json()
         code = resp["status"]["code"]
+
         if code == SUCCESS:
             return resp
-        elif code == EXPIRED_TOKEN:
+
+        if code == EXPIRED_TOKEN:
             raise ExpiredTokenError("Access token is expired")
-        else:
-            msg = resp["status"]["message"]
-            raise ApiError("Api Request Failed With Code: {}\n{}".format(code, msg))
+
+        msg = resp["status"]["message"]
+        raise ApiError("Api Request Failed With Code: {}\n{}".format(code, msg))
 
     def send_functions(self, functions, identifier):
         batches = get_chunks(functions, 10)
@@ -130,13 +134,13 @@ class ApiConnection:
         self.tokens.insert_user(user_id, access_token, refresh_token)
         tstat_ids = self.get_tstat_ids(access_token)
         for tstat_id in tstat_ids:
-            logger.info("Adding Thermostat ID: {}".format(tstat_id))
+            logger.info("Adding Thermostat ID: %s", tstat_id)
             self.tokens.insert_tstat(user_id, tstat_id)
 
     def get_tstat_ids(self, acc):
         headers = {"Content-Type": "application/json;charset=UTF-8",
                    "Authorization": "Bearer " + acc}
-        url = url_base + version + 'thermostat'
+        url = URL_BASE + VERSION + 'thermostat'
         selection = {"selectionType": "registered", "selectionMatch": ""}
         params = {'format': 'json',
                   'body': json.dumps({"selection": selection})}
@@ -146,9 +150,9 @@ class ApiConnection:
 
     def get_auth_pin(self):
         """Get an authorization pin for the ecobee binary schedule app."""
-        url = url_base + "authorize"
+        url = URL_BASE + "authorize"
         params = {"response_type": "ecobeePin",
-                  "client_id": app_key,
+                  "client_id": APP_KEY,
                   "scope": "smartWrite"}
         resp = requests.get(url, params=params)
         try:
@@ -159,8 +163,8 @@ class ApiConnection:
 
     def get_tokens(self, code):
         """Get the tokens for a user once they have entered the auth pin."""
-        url = url_base + "token"
-        params = {"grant_type": "ecobeePin", "code": code, "client_id": app_key}
+        url = URL_BASE + "token"
+        params = {"grant_type": "ecobeePin", "code": code, "client_id": APP_KEY}
         temp = requests.post(url, params=params).json()
         return (temp["access_token"], temp["refresh_token"])
 
@@ -178,11 +182,11 @@ def format_dict(dictionary, depth=0):
     for key, val in dictionary.items():
         string += depth * tab
         string += "{}: ".format(key)
-        if type(val) is dict:
+        if isinstance(val, dict):
             string += format_dict(val, depth + 1)
 
         else:
-            if type(val) is str:
+            if isinstance(val, str):
                 fmt = "'{}'\n"
             else:
                 fmt = "{}\n"
