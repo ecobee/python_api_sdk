@@ -15,8 +15,6 @@ tstat_test_csv = "ebapi_tstat.cvs"
 
 class TestFileTokens(unittest.TestCase):
 
-
-
     def tearDown(self):
         clear_env_vars()
         delete_test_csvs()

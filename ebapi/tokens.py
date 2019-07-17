@@ -9,69 +9,48 @@ import logging
 import requests
 import pandas as pd
 
+from ebapi.constants import env_vars
+
 
 logger = logging.getLogger(__name__)
 
+class Config:
+    """This class stores the enviornment variables."""
 
-class FileTokens():
+    def __init__(self):
+        """Populate enviornment variables."""
+
+        self.validate_enviornment()
+
+        self.user_file = os.environ[env_vars.EV_USER_TOKEN_FILE]
+        self.tstat_file = os.environ[env_vars.EV_USER_TSTAT_FILE]
+        self.app_key = os.environ[env_vars.EV_APP_KEY]
+
+    def validate_enviornment(self):
+        """Return a list of the the enviornment variables not found."""
+       
+        missing_evs = [ev for ev in env_vars.REQUIRED_EVS if ev not in os.environ.keys()]
+
+        if missing_evs:
+            err_fmt = "Could not find EBAPI enviornment variabel(s): {}"
+            err_msg = err_fmt.format(", ".join(missing_evs))
+            raise EnvironmentError(err_msg)
+
+
+class FileTokens:
     """File Storage of access and refresh tokens."""
 
     def __init__(self, verbose=False):
         """Load enviornment variables and stored files"""
-
-        self.user_ev = "EBAPI_USER_TOKENS_FILE"
-        self.tstat_ev = "EBAPI_USER_TSTAT_FILE"
-        self.unknown_tstat = "Unknown Thermostat ID: {}"
-        self.user_cols = ["user_id", "access_token", "refresh_token"]
-        self.tstat_cols = ["tstat_id", "user_id"]
         
+        self.unknown_tstat = "Unknown Thermostat ID: {}"
+
+        self.config = Config()
+
         self._user = None
         self._tstat = None
 
-        self.user_file = None
-        self.tstat_file = None
-
-        self._load_env_vars_if_valid()
         self._load_csvs()
-
-    def _load_env_vars_if_valid(self):
-        """Load the enviornment variables provided they are defined."""
-
-        missing_evs = self._get_missing_evs()
-
-        if missing_evs:
-            self.raise_env_exception(missing_evs)
-        else:
-            self._load_evs()
-
-    def _get_missing_evs(self):
-        """Return a list of the the enviornment variables not found."""
-
-        not_found = []
-        for name in [self.user_ev, self.tstat_ev]:
-            try:
-                os.environ[name]
-            except KeyError:
-                not_found.append(name)
-        return not_found
-
-    def raise_env_exception(self, not_found):
-        """Raise an a EnviornmentError listing the missing Enviornment Variables."""
-
-        if len(not_found) == 2:
-            missing_env_vars = "Enviornment Variables EBAPI_USER_TOKENS_FILE and EBAPI_USER_TSTAT_FILE not Found"
-            raise EnvironmentError(missing_env_vars)
-
-
-        missing_env_var = "Enviornment Variable {} Not Found"
-        err_msg = missing_env_var.format(not_found[0])
-        raise EnvironmentError(err_msg)
-
-    def _load_evs(self):
-        """Load the required enviornment variables."""
-
-        self.user_file = os.environ[self.user_ev]
-        self.tstat_file = os.environ[self.tstat_ev]
 
     def _load_csvs(self):
         """Load the csv files storing the tokens."""
@@ -90,7 +69,7 @@ class FileTokens():
 
         index_name = 'user_id'
         dtype = {'user_id': str, 'access_token': str, 'refresh_token': str}
-        self._user = pd.read_csv(self.user_file, dtype=dtype)
+        self._user = pd.read_csv(self.config.user_file, dtype=dtype)
         self._user.set_index(index_name, inplace=True)
 
     def _load_tstat_file(self):
@@ -98,14 +77,14 @@ class FileTokens():
 
         index_name = 'tstat_id'
         dtype = {'tstat_id': str, 'user_id': str}
-        self._tstat = pd.read_csv(self.tstat_file, dtype=dtype)
+        self._tstat = pd.read_csv(self.config.tstat_file, dtype=dtype)
         self._tstat.set_index(index_name, inplace=True)
 
     def _get_missing_files(self):
         """Return a list of the missing token files."""
 
         missing_files = []
-        for fname in [self.user_file, self.tstat_file]:
+        for fname in [self.config.user_file, self.config.tstat_file]:
             if not os.path.exists(fname):
                 missing_files.append(fname)
         return missing_files
@@ -119,10 +98,16 @@ class FileTokens():
     def _init_new_files(self):
         """Create new token files."""
 
-        self._user = pd.DataFrame(columns=self.user_cols)
+        user_cols = ["user_id", "access_token", "refresh_token"]
+
+        self._user = pd.DataFrame(columns=user_cols)
         self._user.set_index("user_id", inplace=True)
-        self._tstat = pd.DataFrame(columns=self.tstat_cols)
+
+        tstat_cols = ["tstat_id", "user_id"]
+
+        self._tstat = pd.DataFrame(columns=tstat_cols)
         self._tstat.set_index("tstat_id", inplace=True)
+
         self._save_files()
 
     def _save_files(self):
